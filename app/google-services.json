@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "919812755614",
+    "project_id": "unrewind-3a43b",
+    "storage_bucket": "unrewind-3a43b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:919812755614:android:0bac79eeea96c9838c6b8f",
+        "android_client_info": {
+          "package_name": "com.example.unrewind"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAx1o_2TuEH8yEjF7ucfPGP4S7Y74r8nHk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

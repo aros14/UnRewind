@@ -38,7 +38,6 @@
         android:layout_height="wrap_content"
         android:hint="username..."
         android:inputType="textPersonName"
-        android:textColor="@color/white"
         android:textColorHint="#C5B1B1"
         android:textSize="24sp" />
 
@@ -49,7 +48,6 @@
         android:layout_marginTop="12dp"
         android:hint="password..."
         android:inputType="textPassword"
-        android:textColor="@color/white"
         android:textColorHint="#C5B1B1"
         android:textSize="24sp" />
 

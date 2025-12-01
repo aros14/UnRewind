@@ -1,6 +1,8 @@
 package com.example.unrewind;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -64,10 +66,15 @@ public class SignupActivity extends AppCompatActivity {
 
                         db.collection("users").document(uid)
                                 .set(userData)
-                                .addOnSuccessListener(aVoid ->
-                                        Toast.makeText(SignupActivity.this,
-                                                "Account Created!",
-                                                Toast.LENGTH_SHORT).show())
+                                .addOnSuccessListener(aVoid -> {
+                                    Toast.makeText(SignupActivity.this,
+                                            "Account Created!",
+                                            Toast.LENGTH_SHORT).show();
+
+                                    // Redirect to MainActivity
+                                    startActivity(new Intent(SignupActivity.this, MainActivity.class));
+                                    finish(); // closes SignupActivity so user can't go back
+                                })
                                 .addOnFailureListener(e ->
                                         Toast.makeText(SignupActivity.this,
                                                 "Error saving data",

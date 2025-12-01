@@ -3,19 +3,16 @@ package com.example.unrewind;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class LoginActivity extends AppCompatActivity {
 
     EditText username, password;
-    Button loginButton;
-    int attemptsRemaining = 3;
-
-    final String correctUsername = "jsalazar";
-    final String correctPassword = "12345";
+    Button loginButton, signupButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,38 +22,30 @@ public class LoginActivity extends AppCompatActivity {
         username = findViewById(R.id.etUsername);
         password = findViewById(R.id.etPassword);
         loginButton = findViewById(R.id.btnLogin);
+        signupButton = findViewById(R.id.btnsignup);  // add your signup button
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkCredentials();
-            }
+        // Login button
+        loginButton.setOnClickListener(v -> checkCredentials());
+
+        // Signup button → go to SignupActivity
+        signupButton.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+            startActivity(intent);
         });
     }
 
     private void checkCredentials() {
-        String userInput = username.getText().toString().trim();
-        String passInput = password.getText().toString().trim();
+        String emailTxt = username.getText().toString().trim();
+        String passTxt = password.getText().toString().trim();
 
-        if (userInput.equals(correctUsername) && passInput.equals(correctPassword)) {
-            Toast.makeText(LoginActivity.this, "Redirecting...", Toast.LENGTH_LONG).show();
-
-            // Go to MainActivity
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish(); // Close LoginActivity
-        } else {
-            attemptsRemaining--;
-            if (attemptsRemaining > 0) {
-                Toast.makeText(LoginActivity.this,
-                        "Wrong Credentials! Attempts left: " + attemptsRemaining,
-                        Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(LoginActivity.this,
-                        "Too many failed attempts. Access blocked.",
-                        Toast.LENGTH_LONG).show();
-                loginButton.setEnabled(false); // disable login button
-            }
-        }
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(emailTxt, passTxt)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        finish();
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Invalid Login!", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }

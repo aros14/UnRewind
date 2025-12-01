@@ -1,4 +1,4 @@
 package com.example.unrewind;
 
-public class SignUp {
+public class SignupActivity {
 }

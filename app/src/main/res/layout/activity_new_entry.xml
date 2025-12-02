@@ -48,19 +48,20 @@
                 android:textColorHint="@color/dark_pink"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/ivSearchIcon"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/ivSearchIcon"
+            <ImageButton
+                android:id="@+id/ibSearchSong"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginStart="176dp"
+                android:layout_marginBottom="20dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:scaleType="centerInside"
                 android:src="@android:drawable/ic_menu_search"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/etSearch"
                 app:tint="@color/dark_pink" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -99,7 +100,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="4dp"
                 android:fontFamily="@font/bad_script"
                 android:text="song title"
                 android:textColor="@color/dark_green"
@@ -132,7 +133,7 @@
         app:cardBackgroundColor="@android:color/white"
         app:cardCornerRadius="12dp"
         app:cardElevation="4dp"
-        app:layout_constraintBottom_toTopOf="@id/ivCamera"
+        app:layout_constraintBottom_toTopOf="@id/ibPhotoSelect"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cvSong">
@@ -174,7 +175,7 @@
     </androidx.cardview.widget.CardView>
 
     <ImageButton
-        android:id="@+id/ivCamera"
+        android:id="@+id/ibPhotoSelect"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginBottom="16dp"
@@ -194,9 +195,9 @@
         android:fontFamily="@font/bad_script"
         android:text="save entry"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="@id/ivCamera"
+        app:layout_constraintBottom_toBottomOf="@id/ibPhotoSelect"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/ivCamera"
-        app:layout_constraintTop_toTopOf="@id/ivCamera" />
+        app:layout_constraintStart_toEndOf="@id/ibPhotoSelect"
+        app:layout_constraintTop_toTopOf="@id/ibPhotoSelect" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

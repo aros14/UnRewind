@@ -8,12 +8,144 @@
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/tvHomeTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="148dp"
+        android:layout_marginTop="36dp"
+        android:text="un/rewind"
+        android:textColor="@color/dark_pink"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardCurrentTrack"
+        android:layout_width="0dp"
+        android:layout_height="120dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp"
+        app:layout_constraintTop_toBottomOf="@id/tvHomeTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="12dp">
+
+            <ImageView
+                android:id="@+id/ivAlbumArt"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_music_placeholder"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <TextView
+                android:id="@+id/tvSongTitle"
+                android:text="song title"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/dark_green"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/ivAlbumArt"
+                app:layout_constraintTop_toTopOf="@id/ivAlbumArt"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginStart="12dp"/>
+
+            <TextView
+                android:id="@+id/tvArtist"
+                android:text="artist"
+                android:textSize="14sp"
+                android:textColor="@color/dark_pink"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/tvSongTitle"
+                app:layout_constraintTop_toBottomOf="@id/tvSongTitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="6dp"/>
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:visibility="gone"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <!-- add logic for button to log a song from here-->
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/tvDateSnippet"
+        android:text="Day, Month No."
+        android:textSize="16sp"
+        android:textColor="@color/light_pink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/cardCurrentTrack"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/btnCalendar"
+        android:text="enter calendar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/light_green"
+        android:textColor="@color/dark_pink"
+        app:layout_constraintTop_toBottomOf="@id/cardCurrentTrack"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="12dp"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardQuickActions"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp"
+        app:layout_constraintTop_toBottomOf="@id/tvDateSnippet"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="18dp"
+        android:padding="12dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/btnLog"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="new memory"
+                android:backgroundTint="@color/dark_green"
+                android:textColor="@color/light_pink"
+                android:layout_marginEnd="8dp"/>
+
+            <Button
+                android:id="@+id/btnJournal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="enter journal"
+                android:backgroundTint="@color/dark_green"
+                android:textColor="@color/light_pink"
+                android:layout_marginStart="8dp"/>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

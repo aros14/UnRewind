@@ -65,7 +65,7 @@
         android:textSize="30sp" />
 
     <Button
-        android:id="@+id/btnsignup"
+        android:id="@+id/btnSignup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="#FF24E2"

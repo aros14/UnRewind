@@ -29,7 +29,7 @@ public class SignupActivity extends AppCompatActivity {
 
         firstName = findViewById(R.id.etFirstName);
         email = findViewById(R.id.etEmail);
-        birthday = findViewById(R.id.etBirthday);
+        birthday = findViewById(R.id.etBirthday); //in the future it would be cool to add some changes to the app experience when it's your birthday
         username = findViewById(R.id.etUsername);
         password = findViewById(R.id.etPassword);
         createAccount = findViewById(R.id.btnCreateAccount);

@@ -22,7 +22,7 @@ public class LoginActivity extends AppCompatActivity {
         username = findViewById(R.id.etUsername);
         password = findViewById(R.id.etPassword);
         loginButton = findViewById(R.id.btnLogin);
-        signupButton = findViewById(R.id.btnsignup);  // add your signup button
+        signupButton = findViewById(R.id.btnSignup);
 
         // Login button
         loginButton.setOnClickListener(v -> checkCredentials());

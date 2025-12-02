@@ -3,12 +3,9 @@ package com.example.unrewind;
 import androidx.appcompat.app.AppCompatActivity;
 import android.Manifest;
 import android.content.ContentResolver;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.OpenableColumns;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -21,8 +18,6 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -132,11 +127,11 @@ public class NewEntryActivity extends AppCompatActivity {
         String entryId = UUID.randomUUID().toString();
         long now = System.currentTimeMillis();
 
-        // If image selected, compress and upload first
+        // checking if an image selected, compressing it, making sure its under 5MB and then uploading it
         if (selectedImageUri != null) {
             try {
                 InputStream is = getContentResolver().openInputStream(selectedImageUri);
-                byte[] compressed = ImageCompressor.compressToJpeg(this, selectedImageUri, 1024, 80);
+                byte[] compressed = PicCompressor.compressToJpeg(this, selectedImageUri, 1024, 80);
                 if (compressed.length > MAX_FILE_BYTES) {
                     progressBar.setVisibility(View.GONE);
                     Toast.makeText(this, "Image too large after compression. Choose a smaller image.", Toast.LENGTH_LONG).show();
@@ -161,20 +156,21 @@ public class NewEntryActivity extends AppCompatActivity {
                 Toast.makeText(this, "Failed to read image: " + e.getMessage(), Toast.LENGTH_LONG).show();
             }
         } else {
-            // No image
+            // saving with no picture
             saveEntryToLocalAndRemote(entryId, songTitle, artist, notes, null, now);
         }
     }
 
+    // tweak to fit firebase logic and database schema that you set up
     private void saveEntryToLocalAndRemote(String entryId, String songTitle, String artist,
                                            String notes, String imageUrl, long now) {
         String userId = mAuth.getCurrentUser().getUid();
         EntryEntity entry = new EntryEntity(entryId, userId, now, songTitle, artist, null, null, notes, imageUrl, now, false);
 
-        // Save locally immediately
+        // Save locally immediately?
         viewModel.saveEntryLocally(entry);
 
-        // Save to Firestore
+        // Save to Firestore?
         firestore.collection("entries").document(entryId)
                 .set(entry)
                 .addOnSuccessListener(aVoid -> {

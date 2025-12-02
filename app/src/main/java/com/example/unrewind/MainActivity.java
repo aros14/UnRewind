@@ -16,7 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import com.bumptech.glide.Glide;
+//import com.bumptech.glide.Glide;
 
 // The home screen/dashboard that is meant to show the currently playing track, date, and then 2 quick action buttons
 
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         btnJournal.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, JournalActivity.class)));
 
         // Show today's date snippet
-        tvDateSnippet.setText(Utils.getTodayFormatted()); // Utils helper shown below
+       // tvDateSnippet.setText(Utils.getTodayFormatted()); // Utils helper shown below
 
         // Load currently playing track (attempt Spotify, fallback to mock)
         loadCurrentlyPlayingTrack();
@@ -74,14 +74,15 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void displayTrack(SpotifyHelper.Track track) {
+   private void displayTrack(SpotifyHelper.Track track) {
         tvSongTitle.setText(track.title);
         tvArtist.setText(track.artist);
         if (track.albumArtUrl != null && !track.albumArtUrl.isEmpty()) {
-            Glide.with(this).load(track.albumArtUrl).centerCrop().into(ivAlbumArt);
+            //Glide.with(this).load(track.albumArtUrl).centerCrop().into(ivAlbumArt);
         } else {
             ivAlbumArt.setImageResource(R.drawable.ic_music_placeholder);
         }
+
     }
 }
 

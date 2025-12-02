@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/login"
     android:padding="24dp">
 
     <LinearLayout
@@ -10,54 +11,71 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Enter your details"
+            android:layout_marginBottom="24dp"
+            android:fontFamily="@font/gilda_display"
+            android:textColor="@color/dark_pink"
+            android:text="enter your details"
+            android:textAlignment="center"
             android:textSize="32sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="24dp"/>
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/etFirstName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/bad_script"
+            android:textColorHint="@color/dark_green"
             android:hint="First Name" />
 
         <EditText
             android:id="@+id/etEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/bad_script"
+            android:textColorHint="@color/dark_green"
             android:hint="Email"
-            android:inputType="textEmailAddress"
-            android:layout_marginTop="12dp"/>
+            android:inputType="textEmailAddress" />
 
         <EditText
             android:id="@+id/etBirthday"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Birthday (MM/DD/YYYY)"
-            android:layout_marginTop="12dp"/>
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/bad_script"
+            android:textColorHint="@color/dark_green"
+            android:hint="Birthday (MM/DD/YYYY)" />
 
         <EditText
             android:id="@+id/etUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Username"
-            android:layout_marginTop="12dp"/>
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/bad_script"
+            android:textColorHint="@color/dark_green"
+            android:hint="Username" />
 
         <EditText
             android:id="@+id/etPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/bad_script"
             android:hint="Password"
-            android:inputType="textPassword"
-            android:layout_marginTop="12dp"/>
+            android:textColorHint="@color/dark_green"
+            android:inputType="textPassword" />
 
         <Button
             android:id="@+id/btnCreateAccount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Create Account"
-            android:layout_marginTop="32dp"/>
+            android:layout_marginTop="32dp"
+            android:textColor="@color/brown"
+            android:backgroundTint="@color/dark_green"
+            android:fontFamily="@font/gilda_display"
+            android:textStyle="bold"
+            android:text="Create Account" />
     </LinearLayout>
 </ScrollView>

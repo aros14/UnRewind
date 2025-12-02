@@ -6,6 +6,7 @@
     android:gravity="center"
     android:orientation="vertical"
     android:padding="24dp"
+    android:background="@drawable/login"
     tools:context=".LoginActivity">
 
     <TextView
@@ -14,10 +15,9 @@
         android:layout_marginBottom="24dp"
         android:fontFamily="@font/gilda_display"
         android:gravity="center"
-        android:outlineAmbientShadowColor="#7C2B2B"
-        android:shadowColor="#BF2F2F"
         android:text="un/rewind"
         android:textSize="50sp"
+        android:textColor="@color/dark_pink"
         android:textStyle="bold" />
 
     <TextView
@@ -26,10 +26,9 @@
         android:layout_marginBottom="24dp"
         android:fontFamily="@font/gilda_display"
         android:gravity="center"
-        android:outlineAmbientShadowColor="#7C2B2B"
-        android:shadowColor="#BF2F2F"
         android:text="sign in:"
         android:textSize="30sp"
+        android:textColor="@color/dark_pink"
         android:textStyle="bold" />
 
     <EditText
@@ -37,9 +36,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/bad_script"
-        android:hint="email..."
+        android:hint="email . . ."
         android:inputType="textPersonName"
-        android:textColorHint="#C5B1B1"
+        android:textColorHint="@color/dark_green"
         android:textSize="24sp" />
 
     <EditText
@@ -48,9 +47,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:fontFamily="@font/bad_script"
-        android:hint="password..."
+        android:hint="password . . ."
         android:inputType="textPassword"
-        android:textColorHint="#C5B1B1"
+        android:textColorHint="@color/dark_green"
         android:textSize="24sp" />
 
     <Button
@@ -58,32 +57,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:backgroundTint="#FF24E2"
+        android:backgroundTint="@color/dark_green"
         android:fontFamily="@font/gilda_display"
         android:text="login"
-        android:textColor="#FBF8F8"
+        android:textColor="@color/light_green"
         android:textSize="30sp" />
 
     <Button
         android:id="@+id/btnSignup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="#FF24E2"
+        android:backgroundTint="@color/dark_pink"
         android:fontFamily="@font/gilda_display"
         android:text="sign up?"
-        android:textColor="#FBF8F8"
+        android:textColor="@color/light_pink"
         android:textSize="30sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
+        android:layout_marginTop="24dp"
         android:fontFamily="@font/gilda_display"
         android:gravity="center"
-        android:outlineAmbientShadowColor="#7C2B2B"
-        android:shadowColor="#BF2F2F"
-        android:text="your music
-        journal awaits..."
-        android:textSize="40sp"
+        android:text="your music journal awaits..."
+        android:textSize="20sp"
+        android:textColor="@color/dark_pink"
         android:textStyle="bold" />
 </LinearLayout>

@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FDEEF4"
     android:padding="16dp"
+    android:background="@drawable/newentry"
     tools:context=".NewEntryActivity">
 
     <TextView
@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:fontFamily="@font/bad_script"
-                android:hint="search for your tune..."
+                android:hint="search for your tune . . ."
                 android:padding="16dp"
                 android:textColorHint="@color/dark_pink"
                 android:textSize="16sp"
@@ -55,7 +55,7 @@
                 android:id="@+id/ibSearchSong"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_marginStart="176dp"
+                android:layout_marginStart="156dp"
                 android:layout_marginBottom="20dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:scaleType="centerInside"
@@ -83,6 +83,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/greengrph"
             android:padding="12dp">
 
             <ImageView
@@ -141,6 +142,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@drawable/whitepaper"
             android:padding="16dp">
 
             <TextView
@@ -162,7 +164,7 @@
                 android:background="@null"
                 android:fontFamily="@font/bad_script"
                 android:gravity="top"
-                android:hint="start reminiscing here..."
+                android:hint="start reminiscing here . . ."
                 android:inputType="textMultiLine"
                 android:textColorHint="@android:color/darker_gray"
                 android:textSize="16sp"
@@ -178,12 +180,13 @@
         android:id="@+id/ibPhotoSelect"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="12dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:scaleType="centerInside"
         android:src="@android:drawable/ic_menu_camera"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btnSaveEntry"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:tint="@color/dark_green" />
 
@@ -191,13 +194,13 @@
         android:id="@+id/btnSaveEntry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:backgroundTint="@color/dark_green"
         android:fontFamily="@font/bad_script"
         android:text="save entry"
+
         android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="@id/ibPhotoSelect"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/ibPhotoSelect"
-        app:layout_constraintTop_toTopOf="@id/ibPhotoSelect" />
+        app:layout_constraintEnd_toEndOf="@+id/cvJournal"
+        app:layout_constraintTop_toBottomOf="@+id/cvJournal" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

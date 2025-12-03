@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +35,7 @@ public class CalendarActivity extends AppCompatActivity implements CalendarAdapt
     private ImageView ivSongArt;
     private TextView tvSongTitle, tvSongArtist, tvJournalEntry;
     private Button btnLogSong;
+    private ImageButton btnBackToMain;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -48,11 +50,14 @@ public class CalendarActivity extends AppCompatActivity implements CalendarAdapt
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+
+        btnBackToMain.setOnClickListener(v -> finish());
     }
 
     private void initWidgets() {
         calendarRecyclerView = findViewById(R.id.calendarRecyclerView);
         monthYearText = findViewById(R.id.tvMonth);
+        btnBackToMain = findViewById(R.id.btnBackToMain);
 
         entryCard = findViewById(R.id.entryCard);
         ivSongArt = findViewById(R.id.ivSongArt);

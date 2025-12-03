@@ -2,6 +2,7 @@ package com.example.unrewind;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -20,6 +21,7 @@ public class JournalActivity extends AppCompatActivity {
     private ViewPager2 viewPager;
     private FirebaseAuth mAuth;
     private FirebaseFirestore firestore;
+    private ImageButton btnBackToMain;
 
     private EntryPagerAdapter adapter;
     private List<EntryEntity> entries = new ArrayList<>();
@@ -30,12 +32,15 @@ public class JournalActivity extends AppCompatActivity {
         setContentView(R.layout.activity_journal);
 
         viewPager = findViewById(R.id.viewPager);
+        btnBackToMain = findViewById(R.id.btnBackToMain);
 
         mAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
 
         adapter = new EntryPagerAdapter(this, entries);
         viewPager.setAdapter(adapter);
+
+        btnBackToMain.setOnClickListener(v -> finish());
 
         loadEntries();
     }

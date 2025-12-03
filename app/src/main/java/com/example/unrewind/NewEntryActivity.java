@@ -1,12 +1,16 @@
 package com.example.unrewind;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.content.ContextCompat;
+
 import android.Manifest;
 import android.content.ContentResolver;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,25 +19,20 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.core.content.ContextCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
-//set up firebase logic and the imports:
-//sample create entity class: import com.example.unrewind.data.EntryEntity;
-//sample create entity class: import com.example.unrewind.data.EntryViewModel;
-//import com.google.firebase.storage.FirebaseStorage;
-//import com.google.firebase.storage.StorageReference;
-
 public class NewEntryActivity extends AppCompatActivity {
-    private ImageView ivPreview, ivSongArt;
+
+    private ImageView ivSongArt;
     private Button btnSaveEntry;
     private ImageButton ibSearchSong, ibPhotoSelect;
     private EditText etNotes;
@@ -41,9 +40,8 @@ public class NewEntryActivity extends AppCompatActivity {
     private TextView tvSongTitle, tvSongArtist;
 
     private Uri selectedImageUri;
-    private EntryViewModel viewModel;
     private FirebaseAuth mAuth;
-    private FirebaseFirestore firestore;
+    private FirebaseFirestore db;
     private StorageReference storageRef;
 
     private final long MAX_FILE_BYTES = 5L * 1024L * 1024L; // 5 MB
@@ -56,7 +54,6 @@ public class NewEntryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_entry);
 
-        //ivPreview = findViewById(R.id.ivPreview); do we want to display the photo they pick in this activity?
         ivSongArt = findViewById(R.id.ivSongArt);
         ibPhotoSelect = findViewById(R.id.ibPhotoSelect);
         btnSaveEntry = findViewById(R.id.btnSaveEntry);
@@ -66,42 +63,38 @@ public class NewEntryActivity extends AppCompatActivity {
         tvSongTitle = findViewById(R.id.tvSongTitle);
         tvSongArtist = findViewById(R.id.tvSongArtist);
 
-        viewModel = new EntryViewModel(getApplication());
         mAuth = FirebaseAuth.getInstance();
-        firestore = FirebaseFirestore.getInstance();
+        db = FirebaseFirestore.getInstance();
         storageRef = FirebaseStorage.getInstance().getReference();
 
+        // Image picker
         pickImageLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(),
                 new ActivityResultCallback<Uri>() {
                     @Override
                     public void onActivityResult(Uri uri) {
                         if (uri != null) {
                             selectedImageUri = uri;
-                            Glide.with(NewEntryActivity.this).load(uri).centerCrop().into(ivPreview);
+                            ivSongArt.setImageURI(uri); // show selected image
                         }
                     }
                 });
 
+        // Permission request
         requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(),
                 isGranted -> {
-                    if (isGranted) {
-                        openImagePicker();
-                    } else {
-                        Toast.makeText(this, "Permission required to pick images", Toast.LENGTH_SHORT).show();
-                    }
+                    if (isGranted) openImagePicker();
+                    else Toast.makeText(this, "Permission required to pick images", Toast.LENGTH_SHORT).show();
                 });
 
         ibPhotoSelect.setOnClickListener(v -> {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) {
                 requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
-            } else {
-                openImagePicker();
-            }
+            } else openImagePicker();
         });
 
+        // Mock song search
         ibSearchSong.setOnClickListener(v -> {
-            // try to get spotify integration to look for songs, unsure if the library will be imported or if we need to find another one
             tvSongTitle.setText("Mockingbird Melody");
             tvSongArtist.setText("Sample Artist");
         });
@@ -123,70 +116,70 @@ public class NewEntryActivity extends AppCompatActivity {
             return;
         }
 
-        progressBar.setVisibility(View.VISIBLE);
-        String entryId = UUID.randomUUID().toString();
+        progressBar.setVisibility(ProgressBar.VISIBLE);
+
+        String uid = mAuth.getCurrentUser().getUid();
+        String entryId = UUID.randomUUID().toString(); // can also use Firestore auto ID
         long now = System.currentTimeMillis();
 
-        // checking if an image selected, compressing it, making sure its under 5MB and then uploading it
+        Map<String, Object> entryData = new HashMap<>();
+        entryData.put("entryId", entryId);
+        entryData.put("userId", uid);
+        entryData.put("songTitle", songTitle);
+        entryData.put("artist", artist);
+        entryData.put("notes", notes);
+        entryData.put("createdAt", now);
+        entryData.put("imageUrl", null);
+
         if (selectedImageUri != null) {
             try {
                 InputStream is = getContentResolver().openInputStream(selectedImageUri);
-                byte[] compressed = PicCompressor.compressToJpeg(this, selectedImageUri, 1024, 80);
-                if (compressed.length > MAX_FILE_BYTES) {
-                    progressBar.setVisibility(View.GONE);
-                    Toast.makeText(this, "Image too large after compression. Choose a smaller image.", Toast.LENGTH_LONG).show();
+                byte[] imageData = new byte[is.available()];
+                is.read(imageData);
+
+                if (imageData.length > MAX_FILE_BYTES) {
+                    progressBar.setVisibility(ProgressBar.GONE);
+                    Toast.makeText(this, "Image too large. Choose a smaller image.", Toast.LENGTH_LONG).show();
                     return;
                 }
+
                 String ext = getFileExtension(selectedImageUri);
-                StorageReference imgRef = storageRef.child("images/" + mAuth.getCurrentUser().getUid() + "/" + entryId + "." + ext);
-                imgRef.putBytes(compressed)
-                        .addOnSuccessListener(taskSnapshot -> imgRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                            String imageUrl = uri.toString();
-                            saveEntryToLocalAndRemote(entryId, songTitle, artist, notes, imageUrl, now);
-                        }).addOnFailureListener(e -> {
-                            progressBar.setVisibility(View.GONE);
-                            Toast.makeText(NewEntryActivity.this, "Failed to get image URL: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                        }))
+                StorageReference imgRef = storageRef.child("images/" + uid + "/" + entryId + "." + ext);
+                imgRef.putBytes(imageData)
+                        .addOnSuccessListener(taskSnapshot -> imgRef.getDownloadUrl()
+                                .addOnSuccessListener(uri -> {
+                                    entryData.put("imageUrl", uri.toString());
+                                    saveToFirestore(uid, entryId, entryData);
+                                })
+                                .addOnFailureListener(e -> {
+                                    progressBar.setVisibility(ProgressBar.GONE);
+                                    Toast.makeText(this, "Failed to get image URL: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                }))
                         .addOnFailureListener(e -> {
-                            progressBar.setVisibility(View.GONE);
-                            Toast.makeText(NewEntryActivity.this, "Image upload failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                            progressBar.setVisibility(ProgressBar.GONE);
+                            Toast.makeText(this, "Image upload failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
                         });
             } catch (Exception e) {
-                progressBar.setVisibility(View.GONE);
+                progressBar.setVisibility(ProgressBar.GONE);
                 Toast.makeText(this, "Failed to read image: " + e.getMessage(), Toast.LENGTH_LONG).show();
             }
         } else {
-            // saving with no picture
-            saveEntryToLocalAndRemote(entryId, songTitle, artist, notes, null, now);
+            saveToFirestore(uid, entryId, entryData);
         }
     }
 
-    // tweak to fit firebase logic and database schema that you set up
-    private void saveEntryToLocalAndRemote(String entryId, String songTitle, String artist,
-                                           String notes, String imageUrl, long now) {
-        String userId = mAuth.getCurrentUser().getUid();
-        EntryEntity entry = new EntryEntity(entryId, userId, now, songTitle, artist, null, null, notes, imageUrl, now, false);
-
-        // Save locally immediately?
-        viewModel.saveEntryLocally(entry);
-
-        // Save to Firestore?
-        firestore.collection("entries").document(entryId)
-                .set(entry)
+    private void saveToFirestore(String uid, String entryId, Map<String, Object> entryData) {
+        db.collection("entries")
+                .document(entryId)
+                .set(entryData)
                 .addOnSuccessListener(aVoid -> {
-                    // Mark synced in local DB via WorkManager or direct update
-                    // For simplicity, update synced flag here by re-inserting with synced = true
-                    entry.synced = true;
-                    viewModel.saveEntryLocally(entry);
-                    progressBar.setVisibility(View.GONE);
+                    progressBar.setVisibility(ProgressBar.GONE);
                     Toast.makeText(NewEntryActivity.this, "Entry saved", Toast.LENGTH_SHORT).show();
                     finish();
                 })
                 .addOnFailureListener(e -> {
-                    // Keep local copy unsynced; WorkManager will retry
-                    progressBar.setVisibility(View.GONE);
-                    Toast.makeText(NewEntryActivity.this, "Saved locally. Will sync when online.", Toast.LENGTH_LONG).show();
-                    finish();
+                    progressBar.setVisibility(ProgressBar.GONE);
+                    Toast.makeText(NewEntryActivity.this, "Failed to save entry: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 });
     }
 
@@ -195,5 +188,4 @@ public class NewEntryActivity extends AppCompatActivity {
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(cr.getType(uri));
     }
-
 }

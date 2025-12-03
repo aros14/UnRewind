@@ -14,7 +14,7 @@ import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-public class CalendarActivity extends AppCompatActivity implements CalendarAdapter.OnItemListener {
+public class CalendarActivity extends AppCompatActivity {
 
     private TextView monthYearText;
     private RecyclerView calendarRecyclerView;

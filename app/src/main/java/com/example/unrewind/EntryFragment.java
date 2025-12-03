@@ -12,13 +12,13 @@ import androidx.fragment.app.Fragment;
 
 public class EntryFragment extends Fragment {
 
-    /* variables from database to display details on the page
+    //variables from database to display details on the page
     private static final String ARG_ENTRY_ID = "arg_entry_id";
     private static final String ARG_SONG_TITLE = "arg_song_title";
     private static final String ARG_ARTIST = "arg_artist";
     private static final String ARG_NOTES = "arg_notes";
     private static final String ARG_IMAGE_URL = "arg_image_url";
-    private static final String ARG_DATE = "arg_date"; */
+    private static final String ARG_DATE = "arg_date";
 
     public static EntryFragment newInstance(String entryId, String songTitle, String artist,
                                             String notes, String imageUrl, long dateMillis) {
@@ -65,7 +65,7 @@ public class EntryFragment extends Fragment {
         tvNotes.setText(notes != null && !notes.isEmpty() ? notes : "—");
 
         if (imageUrl != null && !imageUrl.isEmpty()) {
-            Glide.with(requireContext()).load(imageUrl).centerCrop().into(ivArt);
+           Glide.with(requireContext()).load(imageUrl).centerCrop().into(ivArt);
         } else {
             ivArt.setImageResource(R.drawable.ic_music_placeholder);
         }

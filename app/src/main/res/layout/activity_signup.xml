@@ -27,7 +27,9 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/bad_script"
             android:textColorHint="@color/dark_green"
-            android:hint="First Name" />
+            android:hint="First Name"
+            android:textSize="32sp"
+            android:textStyle="bold"/>
 
         <EditText
             android:id="@+id/etEmail"
@@ -37,7 +39,9 @@
             android:fontFamily="@font/bad_script"
             android:textColorHint="@color/dark_green"
             android:hint="Email"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:textSize="32sp"
+            android:textStyle="bold"/>
 
         <EditText
             android:id="@+id/etBirthday"
@@ -46,7 +50,9 @@
             android:layout_marginTop="12dp"
             android:fontFamily="@font/bad_script"
             android:textColorHint="@color/dark_green"
-            android:hint="Birthday (MM/DD/YYYY)" />
+            android:hint="Birthday (MM/DD/YYYY)"
+            android:textSize="32sp"
+            android:textStyle="bold"/>
 
         <EditText
             android:id="@+id/etUsername"
@@ -55,7 +61,9 @@
             android:layout_marginTop="12dp"
             android:fontFamily="@font/bad_script"
             android:textColorHint="@color/dark_green"
-            android:hint="Username" />
+            android:hint="Username"
+            android:textSize="32sp"
+            android:textStyle="bold"/>
 
         <EditText
             android:id="@+id/etPassword"
@@ -65,7 +73,9 @@
             android:fontFamily="@font/bad_script"
             android:hint="Password"
             android:textColorHint="@color/dark_green"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:textSize="30sp"
+            android:textStyle="bold"/>
 
         <Button
             android:id="@+id/btnCreateAccount"
@@ -75,6 +85,7 @@
             android:textColor="@color/brown"
             android:backgroundTint="@color/dark_green"
             android:fontFamily="@font/gilda_display"
+            android:textSize="30sp"
             android:textStyle="bold"
             android:text="Create Account" />
     </LinearLayout>

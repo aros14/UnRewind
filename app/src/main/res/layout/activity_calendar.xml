@@ -159,7 +159,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:backgroundTint="@color/dark_green"
-        android:text="Log a Song for this Day"
+        android:text="log a song for this day?"
         android:textColor="@color/white"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"

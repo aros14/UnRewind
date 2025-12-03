@@ -30,7 +30,7 @@ import java.util.UUID;
 public class NewEntryActivity extends AppCompatActivity {
 
     private ImageView ivSongArt;
-    private ImageButton ibPhotoSelect, ibSearchSong;
+    private ImageButton ibPhotoSelect, ibSearchSong, btnBackToMain;
     private Button btnSaveEntry;
     private EditText etNotes;
     private ProgressBar progressBar;
@@ -58,6 +58,7 @@ public class NewEntryActivity extends AppCompatActivity {
         //progressBar = findViewById(R.id.progressBar);
         tvSongTitle = findViewById(R.id.tvSongTitle);
         tvSongArtist = findViewById(R.id.tvSongArtist);
+        btnBackToMain = findViewById(R.id.btnBackToMain);
 
         // Initialize Firebase
         mAuth = FirebaseAuth.getInstance();
@@ -68,6 +69,7 @@ public class NewEntryActivity extends AppCompatActivity {
         setupResultLaunchers();
 
         // Set click listeners
+        btnBackToMain.setOnClickListener(v -> finish());
         ibPhotoSelect.setOnClickListener(v -> handleImageSelection());
         ibSearchSong.setOnClickListener(v -> {
             // Mock song search - replace with your actual implementation

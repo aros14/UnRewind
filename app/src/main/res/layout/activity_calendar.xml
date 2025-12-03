@@ -8,6 +8,16 @@
     android:background="@drawable/calendar"
     tools:context=".CalendarActivity">
 
+    <ImageButton
+        android:id="@+id/btnBackToMain"
+        android:layout_width="65dp"
+        android:layout_height="53dp"
+        android:src="@android:drawable/ic_menu_revert"
+        android:backgroundTint="@color/dark_pink"
+        android:contentDescription="Back to Main"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/tvCalendarTitle"
         android:layout_width="wrap_content"
@@ -111,7 +121,7 @@
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.031"
-                app:layout_constraintStart_toEndOf="@id/ivSongArt"
+                app:layout_constraintStart_toEndOf="@+id/ivSongArt"
                 app:layout_constraintTop_toTopOf="@+id/ivSongArt" />
 
             <TextView
@@ -124,20 +134,20 @@
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="@id/tvSongTitle"
-                app:layout_constraintTop_toBottomOf="@id/tvSongTitle" />
+                app:layout_constraintStart_toStartOf="@+id/tvSongTitle"
+                app:layout_constraintTop_toBottomOf="@+id/tvSongTitle" />
 
             <TextView
                 android:id="@+id/tvJournalEntry"
                 android:layout_width="308dp"
                 android:layout_height="26dp"
-                android:layout_marginTop="8dp"
+                android:android.layout_marginTop="8dp"
                 android:fontFamily="@font/bad_script"
                 android:text="nothing to see here!"
                 android:textColor="@color/brown"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/ivSongArt"
+                app:layout_constraintStart_toStartOf="@+id/ivSongArt"
                 app:layout_constraintTop_toBottomOf="@+id/ivSongArt" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

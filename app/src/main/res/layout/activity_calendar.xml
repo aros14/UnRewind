@@ -4,15 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FDEEF4"
     android:padding="16dp"
+    android:background="@drawable/calendar"
     tools:context=".CalendarActivity">
 
     <TextView
         android:id="@+id/tvCalendarTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="serif"
+        android:layout_marginTop="56dp"
+        android:fontFamily="@font/gilda_display"
         android:text="calendar"
         android:textColor="@color/dark_pink"
         android:textSize="24sp"
@@ -37,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:fontFamily="serif"
+        android:fontFamily="@font/twinkle_star"
         android:text="November"
         android:textColor="@color/dark_pink"
         android:textSize="32sp"
@@ -63,7 +64,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:background="@color/light_green"
+        android:background="@drawable/greenpaper"
         android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -84,49 +85,54 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/whitepaper"
             android:padding="12dp">
 
             <ImageView
                 android:id="@+id/ivSongArt"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
+                android:layout_marginStart="24dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_music_placeholder"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.105" />
 
             <TextView
                 android:id="@+id/tvSongTitle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="211dp"
+                android:layout_height="34dp"
                 android:layout_marginStart="12dp"
-                android:fontFamily="serif"
+                android:fontFamily="@font/bad_script"
                 android:text="song title"
                 android:textColor="@color/dark_green"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/ivSongArt"
+                app:layout_constraintHorizontal_bias="0.031"
+                app:layout_constraintStart_toEndOf="@id/ivSongArt"
                 app:layout_constraintTop_toTopOf="@+id/ivSongArt" />
 
             <TextView
                 android:id="@+id/tvSongArtist"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:fontFamily="serif"
+                android:fontFamily="@font/bad_script"
                 android:text="artist"
                 android:textColor="@color/dark_pink"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@id/tvSongTitle"
                 app:layout_constraintTop_toBottomOf="@id/tvSongTitle" />
 
             <TextView
                 android:id="@+id/tvJournalEntry"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="308dp"
+                android:layout_height="26dp"
                 android:layout_marginTop="8dp"
-                android:fontFamily="serif"
+                android:fontFamily="@font/bad_script"
                 android:text="nothing to see here!"
                 android:textColor="@color/brown"
                 android:textSize="14sp"

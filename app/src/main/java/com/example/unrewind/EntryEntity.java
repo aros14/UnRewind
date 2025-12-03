@@ -1,20 +1,24 @@
-package com.example.unrewind.data;
+package com.example.unrewind;
+
+import com.google.firebase.firestore.DocumentId;
 
 public class EntryEntity {
 
+    @DocumentId
     public String entryId;
+    public String userId;
     public String songTitle;
     public String artist;
     public String notes;
     public String imageUrl;
-    public long dateMillis;  // <<< MATCHES ADAPTER + FRAGMENT
+    public long dateMillis;
 
     // Required empty constructor for Firestore
     public EntryEntity() {}
 
-    public EntryEntity(String entryId, String songTitle, String artist,
+    public EntryEntity(String userId, String songTitle, String artist,
                        String notes, String imageUrl, long dateMillis) {
-        this.entryId = entryId;
+        this.userId = userId;
         this.songTitle = songTitle;
         this.artist = artist;
         this.notes = notes;

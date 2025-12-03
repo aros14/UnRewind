@@ -65,7 +65,7 @@ public class JournalActivity extends AppCompatActivity {
                     }
 
                     // Sort from oldest → newest
-                    Collections.sort(remote, (a, b) -> Long.compare(a.createdAt, b.createdAt));
+                    Collections.sort(remote, (a, b) -> Long.compare(a.dateMillis, b.dateMillis));
 
                     populatePager(remote);
                 })

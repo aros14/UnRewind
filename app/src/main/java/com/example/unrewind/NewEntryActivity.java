@@ -1,7 +1,6 @@
 package com.example.unrewind;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.content.ContextCompat;
@@ -11,6 +10,7 @@ import android.content.ContentResolver;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,16 +25,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 public class NewEntryActivity extends AppCompatActivity {
 
     private ImageView ivSongArt;
+    private ImageButton ibPhotoSelect, ibSearchSong;
     private Button btnSaveEntry;
-    private ImageButton ibSearchSong, ibPhotoSelect;
     private EditText etNotes;
     private ProgressBar progressBar;
     private TextView tvSongTitle, tvSongArtist;
@@ -44,8 +41,6 @@ public class NewEntryActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private StorageReference storageRef;
 
-    private final long MAX_FILE_BYTES = 5L * 1024L * 1024L; // 5 MB
-
     private ActivityResultLauncher<String> pickImageLauncher;
     private ActivityResultLauncher<String> requestPermissionLauncher;
 
@@ -54,52 +49,57 @@ public class NewEntryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_entry);
 
+        // Initialize views
         ivSongArt = findViewById(R.id.ivSongArt);
         ibPhotoSelect = findViewById(R.id.ibPhotoSelect);
         btnSaveEntry = findViewById(R.id.btnSaveEntry);
         ibSearchSong = findViewById(R.id.ibSearchSong);
         etNotes = findViewById(R.id.etNotes);
-        progressBar = findViewById(R.id.progressBar);
+        //progressBar = findViewById(R.id.progressBar);
         tvSongTitle = findViewById(R.id.tvSongTitle);
         tvSongArtist = findViewById(R.id.tvSongArtist);
 
+        // Initialize Firebase
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         storageRef = FirebaseStorage.getInstance().getReference();
 
-        // Image picker
+        // Setup ActivityResultLaunchers
+        setupResultLaunchers();
+
+        // Set click listeners
+        ibPhotoSelect.setOnClickListener(v -> handleImageSelection());
+        ibSearchSong.setOnClickListener(v -> {
+            // Mock song search - replace with your actual implementation
+            tvSongTitle.setText("song title");
+            tvSongArtist.setText("artist");
+        });
+        btnSaveEntry.setOnClickListener(v -> saveEntry());
+    }
+
+    private void setupResultLaunchers() {
         pickImageLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(),
-                new ActivityResultCallback<Uri>() {
-                    @Override
-                    public void onActivityResult(Uri uri) {
-                        if (uri != null) {
-                            selectedImageUri = uri;
-                            ivSongArt.setImageURI(uri); // show selected image
-                        }
+                uri -> {
+                    if (uri != null) {
+                        selectedImageUri = uri;
+                        Toast.makeText(this, "Image selected", Toast.LENGTH_SHORT).show();
                     }
                 });
 
-        // Permission request
         requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(),
                 isGranted -> {
                     if (isGranted) openImagePicker();
-                    else Toast.makeText(this, "Permission required to pick images", Toast.LENGTH_SHORT).show();
+                    else Toast.makeText(this, "Permission required to select images", Toast.LENGTH_SHORT).show();
                 });
+    }
 
-        ibPhotoSelect.setOnClickListener(v -> {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED) {
-                requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
-            } else openImagePicker();
-        });
-
-        // Mock song search
-        ibSearchSong.setOnClickListener(v -> {
-            tvSongTitle.setText("Mockingbird Melody");
-            tvSongArtist.setText("Sample Artist");
-        });
-
-        btnSaveEntry.setOnClickListener(v -> saveEntry());
+    private void handleImageSelection() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
+        } else {
+            openImagePicker();
+        }
     }
 
     private void openImagePicker() {
@@ -112,74 +112,55 @@ public class NewEntryActivity extends AppCompatActivity {
         String artist = tvSongArtist.getText().toString();
 
         if (mAuth.getCurrentUser() == null) {
-            Toast.makeText(this, "You must be signed in to save entries", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "You must be logged in to save an entry", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        progressBar.setVisibility(ProgressBar.VISIBLE);
+        if (songTitle.isEmpty() || artist.isEmpty()) {
+            Toast.makeText(this, "Please select a song before saving", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
+        progressBar.setVisibility(View.VISIBLE);
         String uid = mAuth.getCurrentUser().getUid();
-        String entryId = UUID.randomUUID().toString(); // can also use Firestore auto ID
         long now = System.currentTimeMillis();
 
-        Map<String, Object> entryData = new HashMap<>();
-        entryData.put("entryId", entryId);
-        entryData.put("userId", uid);
-        entryData.put("songTitle", songTitle);
-        entryData.put("artist", artist);
-        entryData.put("notes", notes);
-        entryData.put("createdAt", now);
-        entryData.put("imageUrl", null);
+        EntryEntity newEntry = new EntryEntity(uid, songTitle, artist, notes, null, now);
 
         if (selectedImageUri != null) {
-            try {
-                InputStream is = getContentResolver().openInputStream(selectedImageUri);
-                byte[] imageData = new byte[is.available()];
-                is.read(imageData);
+            String extension = getFileExtension(selectedImageUri);
+            StorageReference imgRef = storageRef.child("images/" + uid + "/" + UUID.randomUUID().toString() + "." + extension);
 
-                if (imageData.length > MAX_FILE_BYTES) {
-                    progressBar.setVisibility(ProgressBar.GONE);
-                    Toast.makeText(this, "Image too large. Choose a smaller image.", Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                String ext = getFileExtension(selectedImageUri);
-                StorageReference imgRef = storageRef.child("images/" + uid + "/" + entryId + "." + ext);
-                imgRef.putBytes(imageData)
-                        .addOnSuccessListener(taskSnapshot -> imgRef.getDownloadUrl()
-                                .addOnSuccessListener(uri -> {
-                                    entryData.put("imageUrl", uri.toString());
-                                    saveToFirestore(uid, entryId, entryData);
-                                })
-                                .addOnFailureListener(e -> {
-                                    progressBar.setVisibility(ProgressBar.GONE);
-                                    Toast.makeText(this, "Failed to get image URL: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                                }))
-                        .addOnFailureListener(e -> {
-                            progressBar.setVisibility(ProgressBar.GONE);
-                            Toast.makeText(this, "Image upload failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                        });
-            } catch (Exception e) {
-                progressBar.setVisibility(ProgressBar.GONE);
-                Toast.makeText(this, "Failed to read image: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            }
+            imgRef.putFile(selectedImageUri)
+                    .addOnSuccessListener(taskSnapshot -> imgRef.getDownloadUrl()
+                            .addOnSuccessListener(uri -> {
+                                newEntry.imageUrl = uri.toString();
+                                saveEntryToFirestore(newEntry);
+                            })
+                            .addOnFailureListener(e -> {
+                                progressBar.setVisibility(View.GONE);
+                                Toast.makeText(NewEntryActivity.this, "Failed to get image URL", Toast.LENGTH_LONG).show();
+                            }))
+                    .addOnFailureListener(e -> {
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(NewEntryActivity.this, "Image upload failed", Toast.LENGTH_LONG).show();
+                    });
         } else {
-            saveToFirestore(uid, entryId, entryData);
+            saveEntryToFirestore(newEntry);
         }
     }
 
-    private void saveToFirestore(String uid, String entryId, Map<String, Object> entryData) {
+    private void saveEntryToFirestore(EntryEntity entry) {
         db.collection("entries")
-                .document(entryId)
-                .set(entryData)
-                .addOnSuccessListener(aVoid -> {
-                    progressBar.setVisibility(ProgressBar.GONE);
-                    Toast.makeText(NewEntryActivity.this, "Entry saved", Toast.LENGTH_SHORT).show();
+                .add(entry)
+                .addOnSuccessListener(documentReference -> {
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(NewEntryActivity.this, "Entry saved successfully!", Toast.LENGTH_SHORT).show();
                     finish();
                 })
                 .addOnFailureListener(e -> {
-                    progressBar.setVisibility(ProgressBar.GONE);
-                    Toast.makeText(NewEntryActivity.this, "Failed to save entry: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(NewEntryActivity.this, "Failed to save entry", Toast.LENGTH_LONG).show();
                 });
     }
 
